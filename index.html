@@ -13,14 +13,15 @@
         }
 
         :root {
-            --primary-color: #D4A373;
-            --secondary-color: #c59363;
+            --primary-color: #006233;
+            --secondary-color: #D21034;
+            --accent-color: #ffffff;
             --background: #f5f5f4;
             --text-dark: #1a1a1a;
             --text-light: #666666;
             --card-bg: #ffffff;
             --shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
-            --shadow-hover: 0 4px 20px rgba(212, 163, 115, 0.3);
+            --shadow-hover: 0 4px 20px rgba(0, 98, 51, 0.3);
         }
 
         body {
@@ -279,6 +280,47 @@
             box-shadow: var(--shadow);
         }
 
+        /* Map Legend */
+        .map-legend {
+            background: white;
+            padding: 1rem;
+            border-radius: 8px;
+            box-shadow: var(--shadow);
+            margin-top: 1rem;
+        }
+
+        .map-legend h4 {
+            color: var(--primary-color);
+            margin-bottom: 0.75rem;
+            font-size: 1.1rem;
+            text-align: center;
+        }
+
+        .legend-items {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 1rem;
+            justify-content: center;
+        }
+
+        .legend-item {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .legend-color {
+            width: 30px;
+            height: 20px;
+            border-radius: 4px;
+            border: 2px solid #333;
+        }
+
+        .legend-label {
+            font-size: 0.9rem;
+            color: var(--text-dark);
+        }
+
         /* Statistics Dashboard */
         .stats-grid {
             display: grid;
@@ -388,6 +430,202 @@
         .close:hover {
             color: var(--primary-color);
         }
+
+        /* Chatbot Styles */
+        #chatbot-button {
+            position: fixed;
+            bottom: 20px;
+            left: 20px;
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+            color: white;
+            border: none;
+            font-size: 28px;
+            cursor: pointer;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+            transition: all 0.3s;
+            z-index: 1999;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        #chatbot-button:hover {
+            transform: scale(1.1);
+            box-shadow: 0 6px 20px rgba(0, 0, 0, 0.4);
+        }
+
+        #chatbot-container {
+            display: none;
+            position: fixed;
+            bottom: 90px;
+            left: 20px;
+            width: 350px;
+            height: 500px;
+            background: var(--card-bg);
+            border-radius: 12px;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.2);
+            z-index: 1998;
+            flex-direction: column;
+            overflow: hidden;
+        }
+
+        #chatbot-container.active {
+            display: flex;
+        }
+
+        #chatbot-header {
+            background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+            color: white;
+            padding: 1rem;
+            font-weight: 600;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        #chatbot-close {
+            background: none;
+            border: none;
+            color: white;
+            font-size: 24px;
+            cursor: pointer;
+            padding: 0;
+            width: 30px;
+            height: 30px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        #chatbot-messages {
+            flex: 1;
+            overflow-y: auto;
+            padding: 1rem;
+            background: #f9f9f9;
+        }
+
+        .chat-message {
+            margin-bottom: 1rem;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .chat-message.user {
+            align-items: flex-end;
+        }
+
+        .chat-message.bot {
+            align-items: flex-start;
+        }
+
+        .message-content {
+            max-width: 80%;
+            padding: 0.75rem 1rem;
+            border-radius: 12px;
+            word-wrap: break-word;
+        }
+
+        .chat-message.user .message-content {
+            background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+            color: white;
+            border-bottom-right-radius: 4px;
+        }
+
+        .chat-message.bot .message-content {
+            background: white;
+            color: var(--text-dark);
+            border-bottom-left-radius: 4px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+
+        .message-time {
+            font-size: 0.75rem;
+            color: var(--text-light);
+            margin-top: 0.25rem;
+        }
+
+        #chatbot-input-container {
+            padding: 1rem;
+            background: white;
+            border-top: 1px solid #e0e0e0;
+            display: flex;
+            gap: 0.5rem;
+        }
+
+        #chatbot-input {
+            flex: 1;
+            padding: 0.75rem;
+            border: 1px solid #e0e0e0;
+            border-radius: 20px;
+            outline: none;
+            font-family: inherit;
+        }
+
+        #chatbot-input:focus {
+            border-color: var(--primary-color);
+        }
+
+        #chatbot-send {
+            background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+            color: white;
+            border: none;
+            padding: 0.75rem 1.5rem;
+            border-radius: 20px;
+            cursor: pointer;
+            font-weight: 600;
+            transition: all 0.3s;
+        }
+
+        #chatbot-send:hover {
+            transform: scale(1.05);
+        }
+
+        #chatbot-send:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+
+        .typing-indicator {
+            display: flex;
+            gap: 4px;
+            padding: 1rem;
+        }
+
+        .typing-indicator span {
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            background: var(--primary-color);
+            animation: typing 1.4s infinite;
+        }
+
+        .typing-indicator span:nth-child(2) {
+            animation-delay: 0.2s;
+        }
+
+        .typing-indicator span:nth-child(3) {
+            animation-delay: 0.4s;
+        }
+
+        @keyframes typing {
+            0%, 60%, 100% {
+                transform: translateY(0);
+            }
+            30% {
+                transform: translateY(-10px);
+            }
+        }
+
+        @media (max-width: 768px) {
+            #chatbot-container {
+                width: calc(100vw - 40px);
+                height: 70vh;
+                bottom: 90px;
+            }
+        }
     </style>
 </head>
 <body>
@@ -425,6 +663,19 @@
         <h2 class="section-title">الخريطة التفاعلية</h2>
         <div class="map-container">
             <div id="map"></div>
+            <div class="map-legend">
+                <h4>مفتاح الخريطة</h4>
+                <div class="legend-items">
+                    <div class="legend-item">
+                        <div class="legend-color" style="background: #006233; width: 20px; height: 20px; border-radius: 50%;"></div>
+                        <span class="legend-label">مراكز الدوائر</span>
+                    </div>
+                    <div class="legend-item">
+                        <div class="legend-color" style="background: #D21034; width: 16px; height: 16px; border-radius: 50%;"></div>
+                        <span class="legend-label">البلديات</span>
+                    </div>
+                </div>
+            </div>
         </div>
     </section>
 
@@ -447,75 +698,92 @@
         </div>
     </div>
 
+    <!-- Chatbot -->
+    <button id="chatbot-button" title="المساعد الذكي - AI Assistant">
+        🤖
+    </button>
+
+    <div id="chatbot-container">
+        <div id="chatbot-header">
+            <span>المساعد الذكي</span>
+            <button id="chatbot-close">×</button>
+        </div>
+        <div id="chatbot-messages"></div>
+        <div id="chatbot-input-container">
+            <input type="text" id="chatbot-input" placeholder="اكتب سؤالك هنا..." />
+            <button id="chatbot-send">إرسال</button>
+        </div>
+    </div>
+
     <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
     <script>
         // Data
         const provinceData = {
             name: "ولاية قصر البخاري",
             name_en: "Ksar El-Boukhari Province",
-            center: { lat: 35.8881, lng: 2.7491 },
+            center: { lat: 35.8855, lng: 2.7508 },
             dairas: [
                 {
                     name: "دائرة قصر البخاري",
-                    lat: 35.8881,
-                    lng: 2.7491,
+                    lat: 35.8855,
+                    lng: 2.7508,
                     municipalities: [
-                        { name: "قصر البخاري (مقر)", population: 67000, area: 53.6, lat: 35.8881, lng: 2.7491 },
-                        { name: "سانق", population: 6500, area: 178, lat: 35.8046, lng: 2.8465 },
-                        { name: "مفاتحة", population: 5200, area: 95, lat: 35.9488, lng: 2.8020 }
+                        { name: "قصر البخاري (مقر)", population: 67000, area: 53.6, lat: 35.8855, lng: 2.7508 },
+                        { name: "سانق", population: 6500, area: 178, lat: 35.8493, lng: 2.8277 },
+                        { name: "مفاتحة", population: 5200, area: 95, lat: 35.8836, lng: 2.9316 }
                     ]
                 },
                 {
                     name: "دائرة شلالة العذاورة",
-                    lat: 35.9331,
-                    lng: 3.4127,
+                    lat: 35.9402,
+                    lng: 3.4138,
                     municipalities: [
-                        { name: "شلالة العذاورة", population: 57000, area: 182, lat: 35.9331, lng: 3.4127 },
-                        { name: "عين القصير", population: 5500, area: 145, lat: 35.8924, lng: 3.3010 },
-                        { name: "تفراوت", population: 8900, area: 120, lat: 36.0021, lng: 3.4215 },
-                        { name: "شنيقل", population: 6800, area: 110, lat: 35.8512, lng: 3.5123 }
+                        { name: "شلالة العذاورة", population: 57000, area: 182, lat: 35.9402, lng: 3.4138 },
+                        { name: "عين القصير", population: 5500, area: 145, lat: 35.8519, lng: 3.4705 },
+                        { name: "تفراوت", population: 8900, area: 120, lat: 35.9713, lng: 3.3519 },
+                        { name: "شنيقل", population: 6800, area: 110, lat: 35.9222, lng: 3.5666 }
                     ]
                 },
                 {
                     name: "دائرة عين بوسيف",
-                    lat: 35.8833,
-                    lng: 3.1667,
+                    lat: 35.8912,
+                    lng: 3.1585,
                     municipalities: [
-                        { name: "عين بوسيف", population: 42000, area: 210, lat: 35.8833, lng: 3.1667 },
-                        { name: "سيدي دامد", population: 9500, area: 160, lat: 35.7833, lng: 3.2167 },
-                        { name: "العوينات", population: 4800, area: 130, lat: 35.8667, lng: 3.0833 },
-                        { name: "أولاد معرف", population: 7600, area: 140, lat: 35.8000, lng: 3.1167 },
-                        { name: "الكاف لخضر", population: 4200, area: 125, lat: 35.9167, lng: 3.1000 }
+                        { name: "عين بوسيف", population: 42000, area: 210, lat: 35.8912, lng: 3.1585 },
+                        { name: "سيدي دامد", population: 9500, area: 160, lat: 35.8694, lng: 3.2544 },
+                        { name: "العوينات", population: 4800, area: 130, lat: 35.8938, lng: 3.0355 },
+                        { name: "أولاد معرف", population: 7600, area: 140, lat: 35.8722, lng: 3.0105 },
+                        { name: "الكاف لخضر", population: 4200, area: 125, lat: 35.9233, lng: 3.2875 }
                     ]
                 },
                 {
                     name: "دائرة الشهبونية",
-                    lat: 35.6041,
-                    lng: 2.6023,
+                    lat: 35.5820,
+                    lng: 2.5792,
                     municipalities: [
-                        { name: "الشهبونية", population: 18000, area: 250, lat: 35.6041, lng: 2.6023 },
-                        { name: "بوغزول", population: 22000, area: 450, lat: 35.7034, lng: 2.8521 },
-                        { name: "بوعيش", population: 7200, area: 200, lat: 35.6021, lng: 2.8012 }
+                        { name: "الشهبونية", population: 18000, area: 250, lat: 35.5820, lng: 2.5792 },
+                        { name: "بوغزول", population: 22000, area: 450, lat: 35.6997, lng: 2.8477 },
+                        { name: "بوعيش", population: 7200, area: 200, lat: 35.5868, lng: 2.3418 }
                     ]
                 },
                 {
                     name: "دائرة عزيز",
-                    lat: 35.8167,
-                    lng: 2.4667,
+                    lat: 35.8241,
+                    lng: 2.4516,
                     municipalities: [
-                        { name: "عزيز", population: 16500, area: 280, lat: 35.8167, lng: 2.4667 },
-                        { name: "أم الجليل", population: 3400, area: 150, lat: 35.8500, lng: 2.4000 },
-                        { name: "دراق", population: 8100, area: 190, lat: 35.9000, lng: 2.3000 }
+                        { name: "عزيز", population: 16500, area: 280, lat: 35.8241, lng: 2.4516 },
+                        { name: "أم الجليل", population: 3400, area: 150, lat: 35.8275, lng: 2.6238 },
+                        { name: "دراق", population: 8100, area: 190, lat: 35.9086, lng: 2.3877 }
                     ]
                 },
                 {
                     name: "دائرة أولاد عنتر",
-                    lat: 35.9667,
-                    lng: 2.5667,
+                    lat: 35.9472,
+                    lng: 2.6022,
                     municipalities: [
-                        { name: "أولاد عنتر", population: 6100, area: 220, lat: 35.9667, lng: 2.5667 },
-                        { name: "بوغار", population: 5900, area: 145, lat: 35.9000, lng: 2.6000 },
-                        { name: "أولاد هلال", population: 3800, area: 180, lat: 35.9500, lng: 2.6500 }
+                        { name: "أولاد عنتر", population: 6100, area: 220, lat: 35.9472, lng: 2.6022 },
+                        { name: "بوغار", population: 5900, area: 145, lat: 35.9113, lng: 2.7166 },
+                        { name: "أولاد هلال", population: 3800, area: 180, lat: 35.9500, lng: 2.6002 }
                     ]
                 }
             ],
@@ -674,7 +942,7 @@
 
         // Initialize Map
         function initMap() {
-            const map = L.map('map').setView([provinceData.center.lat, provinceData.center.lng], 9);
+            const map = L.map('map').setView([provinceData.center.lat, provinceData.center.lng], 10);
 
             L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
                 attribution: '&copy; OpenStreetMap contributors'
@@ -683,20 +951,21 @@
             // Custom icons
             const dairaIcon = L.divIcon({
                 className: 'custom-div-icon',
-                html: '<div style="background: #D4A373; width: 30px; height: 30px; border-radius: 50%; border: 3px solid white; box-shadow: 0 2px 5px rgba(0,0,0,0.3);"></div>',
+                html: '<div style="background: #006233; width: 30px; height: 30px; border-radius: 50%; border: 3px solid white; box-shadow: 0 2px 5px rgba(0,0,0,0.3);"></div>',
                 iconSize: [30, 30],
                 iconAnchor: [15, 15]
             });
 
             const municipalityIcon = L.divIcon({
                 className: 'custom-div-icon',
-                html: '<div style="background: #c59363; width: 20px; height: 20px; border-radius: 50%; border: 2px solid white; box-shadow: 0 2px 5px rgba(0,0,0,0.3);"></div>',
+                html: '<div style="background: #D21034; width: 20px; height: 20px; border-radius: 50%; border: 2px solid white; box-shadow: 0 2px 5px rgba(0,0,0,0.3);"></div>',
                 iconSize: [20, 20],
                 iconAnchor: [10, 10]
             });
 
             // Add daira markers
-            provinceData.dairas.forEach(daira => {
+            provinceData.dairas.forEach((daira, index) => {
+                // Add daira center marker
                 const marker = L.marker([daira.lat, daira.lng], { icon: dairaIcon }).addTo(map);
                 
                 let municipalitiesList = daira.municipalities.map(m => 
@@ -705,7 +974,7 @@
 
                 marker.bindPopup(`
                     <div style="text-align: right; direction: rtl; font-family: Arial, sans-serif;">
-                        <h3 style="color: #D4A373; margin-bottom: 10px;">${daira.name}</h3>
+                        <h3 style="color: #006233; margin-bottom: 10px;">${daira.name}</h3>
                         <p><strong>البلديات:</strong></p>
                         <ul style="padding-right: 20px;">${municipalitiesList}</ul>
                     </div>
@@ -714,9 +983,11 @@
                 // Add municipality markers
                 daira.municipalities.forEach(municipality => {
                     const munMarker = L.marker([municipality.lat, municipality.lng], { icon: municipalityIcon }).addTo(map);
+                    
                     munMarker.bindPopup(`
                         <div style="text-align: right; direction: rtl; font-family: Arial, sans-serif;">
-                            <h4 style="color: #c59363;">${municipality.name}</h4>
+                            <h4 style="color: #D21034;">${municipality.name}</h4>
+                            <p><strong>الدائرة:</strong> ${daira.name}</p>
                             <p>👥 السكان: ${municipality.population.toLocaleString('ar-DZ')} نسمة</p>
                             <p>📍 المساحة: ${municipality.area} كم²</p>
                         </div>
@@ -762,6 +1033,165 @@
             renderStatistics();
             initMap();
         });
+
+        // Chatbot functionality - Using local AI responses
+        const chatbotButton = document.getElementById('chatbot-button');
+        const chatbotContainer = document.getElementById('chatbot-container');
+        const chatbotClose = document.getElementById('chatbot-close');
+        const chatbotMessages = document.getElementById('chatbot-messages');
+        const chatbotInput = document.getElementById('chatbot-input');
+        const chatbotSend = document.getElementById('chatbot-send');
+
+        // Knowledge base about Ksar El-Boukhari
+        const knowledgeBase = {
+            greetings: ['مرحبا', 'السلام', 'صباح', 'مساء', 'أهلا', 'hello', 'hi'],
+            population: ['سكان', 'عدد السكان', 'population', 'كم نسمة'],
+            dairas: ['دوائر', 'dairas', 'دائرة', 'القرى'],
+            municipalities: ['بلديات', 'بلدية', 'municipalities', 'communes'],
+            investment: ['استثمار', 'فرص', 'مشاريع', 'investment', 'اقتصاد'],
+            location: ['موقع', 'أين', 'تقع', 'location', 'where'],
+            agriculture: ['فلاحة', 'زراعة', 'agriculture', 'farming'],
+            industry: ['صناعة', 'industry', 'مصانع'],
+            help: ['مساعدة', 'help', 'معلومات', 'information']
+        };
+
+        const responses = {
+            greeting: 'مرحباً بك! أنا المساعد الذكي لولاية قصر البخاري. يمكنني مساعدتك في معرفة معلومات عن:\n✅ السكان والمساحة\n✅ الدوائر والبلديات\n✅ فرص الاستثمار\n✅ الموقع الجغرافي\n\nكيف يمكنني مساعدتك؟',
+            
+            population: 'ولاية قصر البخاري تضم حوالي 315,000 نسمة موزعين على 27 بلدية في 6 دوائر. المدن الرئيسية:\n\n🏘️ قصر البخاري: 67,000 نسمة\n🏘️ شلالة العذاورة: 57,000 نسمة\n🏘️ عين بوسيف: 42,000 نسمة\n🏘️ بوغزول: 22,000 نسمة',
+            
+            dairas: 'تحتوي ولاية قصر البخاري على 6 دوائر:\n\n1️⃣ دائرة قصر البخاري (3 بلديات)\n2️⃣ دائرة شلالة العذاورة (4 بلديات)\n3️⃣ دائرة عين بوسيف (5 بلديات)\n4️⃣ دائرة الشهبونية (3 بلديات)\n5️⃣ دائرة عزيز (3 بلديات)\n6️⃣ دائرة أولاد عنتر (3 بلديات)',
+            
+            municipalities: 'الولاية تضم 27 بلدية موزعة على 6 دوائر. من أهم البلديات:\n\n📍 قصر البخاري (المقر)\n📍 شلالة العذاورة\n📍 عين بوسيف\n📍 بوغزول\n📍 سيدي دامد\n📍 الشهبونية\n\nيمكنك النقر على أي بلدية في الخريطة لمعرفة المزيد!',
+            
+            investment: 'فرص الاستثمار في قصر البخاري:\n\n💼 موقع لوجستي استراتيجي على الطريق الوطني رقم 01\n🏭 أقطاب صناعية كبرى ومدينة بوغزول الجديدة\n🌾 فلاحة وسهوب - إنتاج اللحوم والحبوب\n💰 تحفيزات جبائية ومزايا الهضاب العليا\n🚆 بنية تحتية متطورة (سكك حديدية وطرقات)',
+            
+            location: 'موقع ولاية قصر البخاري:\n\n📌 تقع في الهضاب العليا وسط الجزائر\n📌 على الطريق الوطني رقم 01 (طريق الوحدة الإفريقية)\n📌 حلقة وصل حيوية بين الشمال والجنوب\n📌 الإحداثيات: 35.8881° شمالاً، 2.7491° شرقاً\n\nيمكنك استكشاف الخريطة التفاعلية للمزيد من التفاصيل!',
+            
+            agriculture: 'القطاع الفلاحي في قصر البخاري:\n\n🐑 رائدة في إنتاج اللحوم الحمراء (طابع رعوي)\n🌾 زراعة الحبوب (قمح، شعير)\n🌳 أشجار مثمرة مقاومة للجفاف\n🥔 زراعات موسمية متنوعة\n\nالموقع في الهضاب العليا يوفر مناخاً ملائماً للنشاط الرعوي.',
+            
+            industry: 'القطاع الصناعي:\n\n🏭 مناطق نشاطات صناعية متعددة\n🏗️ مشروع المدينة الجديدة بوغزول\n📦 وفرة في العقار الصناعي\n🚚 موقع لوجستي استراتيجي للتوزيع\n⚙️ صناعات تحويلية وخدماتية',
+            
+            default: 'شكراً على سؤالك! يمكنني مساعدتك في:\n\n📊 معلومات عن السكان والمساحة\n🗺️ الدوائر والبلديات\n💼 فرص الاستثمار\n📍 الموقع الجغرافي\n🌾 الفلاحة والصناعة\n\nاطرح سؤالك بشكل آخر وسأحاول مساعدتك!'
+        };
+
+        // Toggle chatbot
+        chatbotButton.addEventListener('click', () => {
+            chatbotContainer.classList.toggle('active');
+            if (chatbotContainer.classList.contains('active') && chatbotMessages.children.length === 0) {
+                addMessage('bot', responses.greeting);
+            }
+        });
+
+        chatbotClose.addEventListener('click', () => {
+            chatbotContainer.classList.remove('active');
+        });
+
+        // Send message
+        chatbotSend.addEventListener('click', sendMessage);
+        chatbotInput.addEventListener('keypress', (e) => {
+            if (e.key === 'Enter') sendMessage();
+        });
+
+        function addMessage(type, text) {
+            const messageDiv = document.createElement('div');
+            messageDiv.className = `chat-message ${type}`;
+            
+            const contentDiv = document.createElement('div');
+            contentDiv.className = 'message-content';
+            contentDiv.style.whiteSpace = 'pre-line';
+            contentDiv.textContent = text;
+            
+            const timeDiv = document.createElement('div');
+            timeDiv.className = 'message-time';
+            const now = new Date();
+            timeDiv.textContent = now.toLocaleTimeString('ar-DZ', { hour: '2-digit', minute: '2-digit' });
+            
+            messageDiv.appendChild(contentDiv);
+            messageDiv.appendChild(timeDiv);
+            chatbotMessages.appendChild(messageDiv);
+            chatbotMessages.scrollTop = chatbotMessages.scrollHeight;
+        }
+
+        function showTypingIndicator() {
+            const typingDiv = document.createElement('div');
+            typingDiv.className = 'typing-indicator';
+            typingDiv.id = 'typing';
+            typingDiv.innerHTML = '<span></span><span></span><span></span>';
+            chatbotMessages.appendChild(typingDiv);
+            chatbotMessages.scrollTop = chatbotMessages.scrollHeight;
+        }
+
+        function hideTypingIndicator() {
+            const typing = document.getElementById('typing');
+            if (typing) typing.remove();
+        }
+
+        function getResponse(message) {
+            const lowerMessage = message.toLowerCase();
+            
+            // Check for greetings
+            if (knowledgeBase.greetings.some(word => lowerMessage.includes(word))) {
+                return responses.greeting;
+            }
+            
+            // Check for population queries
+            if (knowledgeBase.population.some(word => lowerMessage.includes(word))) {
+                return responses.population;
+            }
+            
+            // Check for dairas queries
+            if (knowledgeBase.dairas.some(word => lowerMessage.includes(word))) {
+                return responses.dairas;
+            }
+            
+            // Check for municipalities queries
+            if (knowledgeBase.municipalities.some(word => lowerMessage.includes(word))) {
+                return responses.municipalities;
+            }
+            
+            // Check for investment queries
+            if (knowledgeBase.investment.some(word => lowerMessage.includes(word))) {
+                return responses.investment;
+            }
+            
+            // Check for location queries
+            if (knowledgeBase.location.some(word => lowerMessage.includes(word))) {
+                return responses.location;
+            }
+            
+            // Check for agriculture queries
+            if (knowledgeBase.agriculture.some(word => lowerMessage.includes(word))) {
+                return responses.agriculture;
+            }
+            
+            // Check for industry queries
+            if (knowledgeBase.industry.some(word => lowerMessage.includes(word))) {
+                return responses.industry;
+            }
+            
+            // Default response
+            return responses.default;
+        }
+
+        function sendMessage() {
+            const message = chatbotInput.value.trim();
+            if (!message) return;
+
+            addMessage('user', message);
+            chatbotInput.value = '';
+            chatbotSend.disabled = true;
+
+            showTypingIndicator();
+
+            // Simulate thinking time
+            setTimeout(() => {
+                hideTypingIndicator();
+                const response = getResponse(message);
+                addMessage('bot', response);
+                chatbotSend.disabled = false;
+            }, 800);
+        }
     </script>
 </body>
 </html>

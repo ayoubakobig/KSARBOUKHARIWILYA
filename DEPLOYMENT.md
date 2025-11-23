@@ -1,10 +1,16 @@
 # Deployment Guide - دليل النشر
 
-## GitHub Pages Deployment
+## 🚀 Quick Deployment to GitHub Pages
 
-### Step-by-Step Instructions
+### Prerequisites
+- GitHub account
+- Git installed on your computer (or use GitHub Desktop)
 
-#### 1. Create GitHub Repository
+---
+
+## Method 1: GitHub Pages Deployment (Recommended)
+
+### Step 1: Create GitHub Repository
 
 1. Go to [GitHub](https://github.com) and sign in
 2. Click the "+" icon → "New repository"
@@ -13,7 +19,7 @@
 5. Don't initialize with README (we already have one)
 6. Click "Create repository"
 
-#### 2. Upload Your Code
+### Step 2: Upload Your Code
 
 **Option A: Using Git Command Line**
 
@@ -28,7 +34,7 @@ git init
 git add .
 
 # Commit files
-git commit -m "Initial commit: Ksar El-Boukhari Province website"
+git commit -m "feat: Initial release - Ksar El-Boukhari Province website v2.0"
 
 # Add remote repository (replace with your GitHub username)
 git remote add origin https://github.com/YOUR_USERNAME/ksar-el-boukhari.git

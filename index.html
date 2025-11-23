@@ -1,0 +1,767 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ولاية قصر البخاري - Ksar El-Boukhari Province</title>
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --primary-color: #D4A373;
+            --secondary-color: #c59363;
+            --background: #f5f5f4;
+            --text-dark: #1a1a1a;
+            --text-light: #666666;
+            --card-bg: #ffffff;
+            --shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+            --shadow-hover: 0 4px 20px rgba(212, 163, 115, 0.3);
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: var(--background);
+            color: var(--text-dark);
+            line-height: 1.6;
+            direction: rtl;
+        }
+
+        /* Custom Scrollbar */
+        ::-webkit-scrollbar {
+            width: 12px;
+        }
+
+        ::-webkit-scrollbar-track {
+            background: var(--background);
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: var(--primary-color);
+            border-radius: 6px;
+        }
+
+        ::-webkit-scrollbar-thumb:hover {
+            background: var(--secondary-color);
+        }
+
+        /* Navigation */
+        nav {
+            position: fixed;
+            top: 0;
+            right: 0;
+            left: 0;
+            background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+            padding: 1rem 2rem;
+            box-shadow: var(--shadow);
+            z-index: 1000;
+        }
+
+        nav ul {
+            list-style: none;
+            display: flex;
+            justify-content: center;
+            gap: 2rem;
+            flex-wrap: wrap;
+        }
+
+        nav a {
+            color: white;
+            text-decoration: none;
+            font-weight: 600;
+            transition: opacity 0.3s;
+            font-size: 0.95rem;
+        }
+
+        nav a:hover {
+            opacity: 0.8;
+        }
+
+        /* Hero Section */
+        .hero {
+            background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+            color: white;
+            padding: 8rem 2rem 4rem;
+            text-align: center;
+            margin-top: 60px;
+        }
+
+        .hero h1 {
+            font-size: 3rem;
+            margin-bottom: 1rem;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.2);
+        }
+
+        .hero p {
+            font-size: 1.2rem;
+            max-width: 800px;
+            margin: 0 auto;
+            line-height: 1.8;
+        }
+
+        /* Container */
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 3rem 2rem;
+        }
+
+        .section-title {
+            text-align: center;
+            font-size: 2.5rem;
+            color: var(--primary-color);
+            margin-bottom: 3rem;
+            position: relative;
+            padding-bottom: 1rem;
+        }
+
+        .section-title::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            right: 50%;
+            transform: translateX(50%);
+            width: 100px;
+            height: 4px;
+            background: var(--primary-color);
+            border-radius: 2px;
+        }
+
+        /* Administrative Structure */
+        .dairas-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 2rem;
+            margin-bottom: 3rem;
+        }
+
+        .daira-card {
+            background: var(--card-bg);
+            border-radius: 12px;
+            padding: 1.5rem;
+            box-shadow: var(--shadow);
+            transition: all 0.3s;
+            border-top: 4px solid var(--primary-color);
+        }
+
+        .daira-card:hover {
+            transform: translateY(-5px);
+            box-shadow: var(--shadow-hover);
+        }
+
+        .daira-header {
+            background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+            color: white;
+            padding: 1rem;
+            border-radius: 8px;
+            margin-bottom: 1.5rem;
+            text-align: center;
+        }
+
+        .daira-header h3 {
+            font-size: 1.5rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .coordinates {
+            font-size: 0.85rem;
+            opacity: 0.9;
+        }
+
+        .municipality {
+            background: var(--background);
+            padding: 1rem;
+            border-radius: 8px;
+            margin-bottom: 0.8rem;
+            border-right: 3px solid var(--primary-color);
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .municipality:hover {
+            background: #fff;
+            border-right-width: 5px;
+            box-shadow: var(--shadow);
+        }
+
+        .municipality-name {
+            font-weight: 600;
+            color: var(--text-dark);
+            margin-bottom: 0.5rem;
+            font-size: 1.1rem;
+        }
+
+        .municipality-info {
+            display: flex;
+            justify-content: space-between;
+            color: var(--text-light);
+            font-size: 0.9rem;
+        }
+
+        /* Investment Opportunities */
+        .investments-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+        }
+
+        .investment-card {
+            background: var(--card-bg);
+            border-radius: 12px;
+            padding: 2rem;
+            box-shadow: var(--shadow);
+            transition: all 0.3s;
+            text-align: center;
+        }
+
+        .investment-card:hover {
+            transform: translateY(-5px);
+            box-shadow: var(--shadow-hover);
+        }
+
+        .investment-icon {
+            width: 80px;
+            height: 80px;
+            margin: 0 auto 1.5rem;
+            background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .investment-icon svg {
+            width: 40px;
+            height: 40px;
+            stroke: white;
+        }
+
+        .investment-card h3 {
+            color: var(--primary-color);
+            margin-bottom: 1rem;
+            font-size: 1.3rem;
+        }
+
+        .investment-card ul {
+            list-style: none;
+            text-align: right;
+        }
+
+        .investment-card li {
+            padding: 0.5rem 0;
+            color: var(--text-light);
+            line-height: 1.6;
+        }
+
+        .investment-card li::before {
+            content: '✓';
+            color: var(--primary-color);
+            font-weight: bold;
+            margin-left: 0.5rem;
+        }
+
+        /* Map Section */
+        .map-container {
+            background: var(--card-bg);
+            border-radius: 12px;
+            padding: 2rem;
+            box-shadow: var(--shadow);
+            margin-bottom: 3rem;
+        }
+
+        #map {
+            height: 600px;
+            border-radius: 8px;
+            box-shadow: var(--shadow);
+        }
+
+        /* Statistics Dashboard */
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 2rem;
+        }
+
+        .stat-card {
+            background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+            color: white;
+            padding: 2rem;
+            border-radius: 12px;
+            text-align: center;
+            box-shadow: var(--shadow);
+            transition: all 0.3s;
+        }
+
+        .stat-card:hover {
+            transform: scale(1.05);
+        }
+
+        .stat-number {
+            font-size: 3rem;
+            font-weight: bold;
+            margin-bottom: 0.5rem;
+        }
+
+        .stat-label {
+            font-size: 1.1rem;
+            opacity: 0.9;
+        }
+
+        /* Footer */
+        footer {
+            background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+            color: white;
+            text-align: center;
+            padding: 2rem;
+            margin-top: 4rem;
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .hero h1 {
+                font-size: 2rem;
+            }
+
+            .hero p {
+                font-size: 1rem;
+            }
+
+            nav ul {
+                gap: 1rem;
+            }
+
+            .section-title {
+                font-size: 2rem;
+            }
+
+            .dairas-grid,
+            .investments-grid,
+            .stats-grid {
+                grid-template-columns: 1fr;
+            }
+
+            #map {
+                height: 400px;
+            }
+        }
+
+        /* Smooth Scrolling */
+        html {
+            scroll-behavior: smooth;
+        }
+
+        /* Modal for Municipality Details */
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 2000;
+            right: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.5);
+        }
+
+        .modal-content {
+            background-color: var(--card-bg);
+            margin: 10% auto;
+            padding: 2rem;
+            border-radius: 12px;
+            width: 90%;
+            max-width: 500px;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+            text-align: center;
+        }
+
+        .close {
+            color: var(--text-light);
+            float: left;
+            font-size: 28px;
+            font-weight: bold;
+            cursor: pointer;
+        }
+
+        .close:hover {
+            color: var(--primary-color);
+        }
+    </style>
+</head>
+<body>
+    <!-- Navigation -->
+    <nav>
+        <ul>
+            <li><a href="#hero">الرئيسية</a></li>
+            <li><a href="#administrative">الهيكل الإداري</a></li>
+            <li><a href="#investments">فرص الاستثمار</a></li>
+            <li><a href="#map">الخريطة</a></li>
+            <li><a href="#statistics">الإحصائيات</a></li>
+        </ul>
+    </nav>
+
+    <!-- Hero Section -->
+    <section id="hero" class="hero">
+        <h1>ولاية قصر البخاري</h1>
+        <p>تقع ولاية قصر البخاري في موقع استراتيجي بالهضاب العليا، وتعتبر حلقة وصل حيوية بين الشمال والجنوب. تتميز بموقعها على الطريق الوطني رقم 01 (طريق الوحدة الإفريقية)، مما يجعلها قطباً اقتصادياً واعداً في مجالات اللوجستيك والصناعة والفلاحة.</p>
+    </section>
+
+    <!-- Administrative Structure -->
+    <section id="administrative" class="container">
+        <h2 class="section-title">الهيكل الإداري - الدوائر والبلديات</h2>
+        <div id="dairas-container" class="dairas-grid"></div>
+    </section>
+
+    <!-- Investment Opportunities -->
+    <section id="investments" class="container">
+        <h2 class="section-title">فرص الاستثمار</h2>
+        <div id="investments-container" class="investments-grid"></div>
+    </section>
+
+    <!-- Map Section -->
+    <section id="map" class="container">
+        <h2 class="section-title">الخريطة التفاعلية</h2>
+        <div class="map-container">
+            <div id="map"></div>
+        </div>
+    </section>
+
+    <!-- Statistics Dashboard -->
+    <section id="statistics" class="container">
+        <h2 class="section-title">الإحصائيات العامة</h2>
+        <div id="statistics-container" class="stats-grid"></div>
+    </section>
+
+    <!-- Footer -->
+    <footer>
+        <p>&copy; 2025 ولاية قصر البخاري - جميع الحقوق محفوظة</p>
+    </footer>
+
+    <!-- Modal for Municipality Details -->
+    <div id="municipalityModal" class="modal">
+        <div class="modal-content">
+            <span class="close">&times;</span>
+            <div id="modal-body"></div>
+        </div>
+    </div>
+
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+    <script>
+        // Data
+        const provinceData = {
+            name: "ولاية قصر البخاري",
+            name_en: "Ksar El-Boukhari Province",
+            center: { lat: 35.8881, lng: 2.7491 },
+            dairas: [
+                {
+                    name: "دائرة قصر البخاري",
+                    lat: 35.8881,
+                    lng: 2.7491,
+                    municipalities: [
+                        { name: "قصر البخاري (مقر)", population: 67000, area: 53.6, lat: 35.8881, lng: 2.7491 },
+                        { name: "سانق", population: 6500, area: 178, lat: 35.8046, lng: 2.8465 },
+                        { name: "مفاتحة", population: 5200, area: 95, lat: 35.9488, lng: 2.8020 }
+                    ]
+                },
+                {
+                    name: "دائرة شلالة العذاورة",
+                    lat: 35.9331,
+                    lng: 3.4127,
+                    municipalities: [
+                        { name: "شلالة العذاورة", population: 57000, area: 182, lat: 35.9331, lng: 3.4127 },
+                        { name: "عين القصير", population: 5500, area: 145, lat: 35.8924, lng: 3.3010 },
+                        { name: "تفراوت", population: 8900, area: 120, lat: 36.0021, lng: 3.4215 },
+                        { name: "شنيقل", population: 6800, area: 110, lat: 35.8512, lng: 3.5123 }
+                    ]
+                },
+                {
+                    name: "دائرة عين بوسيف",
+                    lat: 35.8833,
+                    lng: 3.1667,
+                    municipalities: [
+                        { name: "عين بوسيف", population: 42000, area: 210, lat: 35.8833, lng: 3.1667 },
+                        { name: "سيدي دامد", population: 9500, area: 160, lat: 35.7833, lng: 3.2167 },
+                        { name: "العوينات", population: 4800, area: 130, lat: 35.8667, lng: 3.0833 },
+                        { name: "أولاد معرف", population: 7600, area: 140, lat: 35.8000, lng: 3.1167 },
+                        { name: "الكاف لخضر", population: 4200, area: 125, lat: 35.9167, lng: 3.1000 }
+                    ]
+                },
+                {
+                    name: "دائرة الشهبونية",
+                    lat: 35.6041,
+                    lng: 2.6023,
+                    municipalities: [
+                        { name: "الشهبونية", population: 18000, area: 250, lat: 35.6041, lng: 2.6023 },
+                        { name: "بوغزول", population: 22000, area: 450, lat: 35.7034, lng: 2.8521 },
+                        { name: "بوعيش", population: 7200, area: 200, lat: 35.6021, lng: 2.8012 }
+                    ]
+                },
+                {
+                    name: "دائرة عزيز",
+                    lat: 35.8167,
+                    lng: 2.4667,
+                    municipalities: [
+                        { name: "عزيز", population: 16500, area: 280, lat: 35.8167, lng: 2.4667 },
+                        { name: "أم الجليل", population: 3400, area: 150, lat: 35.8500, lng: 2.4000 },
+                        { name: "دراق", population: 8100, area: 190, lat: 35.9000, lng: 2.3000 }
+                    ]
+                },
+                {
+                    name: "دائرة أولاد عنتر",
+                    lat: 35.9667,
+                    lng: 2.5667,
+                    municipalities: [
+                        { name: "أولاد عنتر", population: 6100, area: 220, lat: 35.9667, lng: 2.5667 },
+                        { name: "بوغار", population: 5900, area: 145, lat: 35.9000, lng: 2.6000 },
+                        { name: "أولاد هلال", population: 3800, area: 180, lat: 35.9500, lng: 2.6500 }
+                    ]
+                }
+            ],
+            investments: [
+                {
+                    title: "موقع لوجستي استراتيجي",
+                    description: [
+                        "يتوسط الطريق الوطني رقم 01 (طريق الوحدة الإفريقية)",
+                        "منطقة عبور حيوية بين الشمال والجنوب والهضاب"
+                    ],
+                    icon: "truck"
+                },
+                {
+                    title: "أقطاب صناعية كبرى",
+                    description: [
+                        "الاستفادة المباشرة من مشروع المدينة الجديدة بوغزول",
+                        "وفرة العقار الصناعي ومناطق النشاطات"
+                    ],
+                    icon: "factory"
+                },
+                {
+                    title: "فلاحة وسهوب",
+                    description: [
+                        "رائدة في إنتاج اللحوم الحمراء (طابع رعوي)",
+                        "زراعات استراتيجية (الحبوب، الأشجار المثمرة المقاومة للجفاف)"
+                    ],
+                    icon: "wheat"
+                },
+                {
+                    title: "تحفيزات جبائية",
+                    description: [
+                        "الاستفادة من مزايا مناطق الهضاب العليا",
+                        "تخفيضات ضريبية وأسعار رمزية للامتياز العقاري"
+                    ],
+                    icon: "percent"
+                },
+                {
+                    title: "بنية تحتية",
+                    description: [
+                        "خطوط السكك الحديدية (الشمال-الجنوب / خط الهضاب)",
+                        "يد عاملة مؤهلة ومراكز تكوين مهني"
+                    ],
+                    icon: "train"
+                }
+            ]
+        };
+
+        // SVG Icons
+        const icons = {
+            truck: '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="1" y="3" width="15" height="13"></rect><polygon points="16 8 20 8 23 11 23 16 16 16 16 8"></polygon><circle cx="5.5" cy="18.5" r="2.5"></circle><circle cx="18.5" cy="18.5" r="2.5"></circle></svg>',
+            factory: '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M2 20h20v2H2z"></path><path d="M7 20V4l5 5V4l5 5v11"></path></svg>',
+            wheat: '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M2 22 16 8"></path><path d="M3.47 12.53 5 11l1.53 1.53a3.5 3.5 0 0 1 0 4.94L5 19l-1.53-1.53a3.5 3.5 0 0 1 0-4.94Z"></path><path d="M7.47 8.53 9 7l1.53 1.53a3.5 3.5 0 0 1 0 4.94L9 15l-1.53-1.53a3.5 3.5 0 0 1 0-4.94Z"></path><path d="M11.47 4.53 13 3l1.53 1.53a3.5 3.5 0 0 1 0 4.94L13 11l-1.53-1.53a3.5 3.5 0 0 1 0-4.94Z"></path><path d="M20 2h2v10h-2"></path><path d="M11.47 17.47 13 19l-1.53 1.53a3.5 3.5 0 0 1-4.94 0L5 19l1.53-1.53a3.5 3.5 0 0 1 4.94 0Z"></path><path d="M15.47 13.47 17 15l-1.53 1.53a3.5 3.5 0 0 1-4.94 0L9 15l1.53-1.53a3.5 3.5 0 0 1 4.94 0Z"></path><path d="M19.47 9.47 21 11l-1.53 1.53a3.5 3.5 0 0 1-4.94 0L13 11l1.53-1.53a3.5 3.5 0 0 1 4.94 0Z"></path></svg>',
+            percent: '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="19" y1="5" x2="5" y2="19"></line><circle cx="6.5" cy="6.5" r="2.5"></circle><circle cx="17.5" cy="17.5" r="2.5"></circle></svg>',
+            train: '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="3" width="16" height="16" rx="2"></rect><path d="M4 11h16"></path><path d="M12 3v8"></path><circle cx="8" cy="16" r="1"></circle><circle cx="16" cy="16" r="1"></circle><path d="M7 19l-2 3"></path><path d="M17 19l2 3"></path></svg>'
+        };
+
+        // Render Dairas
+        function renderDairas() {
+            const container = document.getElementById('dairas-container');
+            provinceData.dairas.forEach(daira => {
+                const dairaCard = document.createElement('div');
+                dairaCard.className = 'daira-card';
+                
+                let municipalitiesHTML = '';
+                daira.municipalities.forEach(municipality => {
+                    municipalitiesHTML += `
+                        <div class="municipality" onclick="showMunicipalityDetails('${municipality.name}', ${municipality.population}, ${municipality.area}, ${municipality.lat}, ${municipality.lng})">
+                            <div class="municipality-name">${municipality.name}</div>
+                            <div class="municipality-info">
+                                <span>👥 ${municipality.population.toLocaleString('ar-DZ')} نسمة</span>
+                                <span>📍 ${municipality.area} كم²</span>
+                            </div>
+                        </div>
+                    `;
+                });
+
+                dairaCard.innerHTML = `
+                    <div class="daira-header">
+                        <h3>${daira.name}</h3>
+                        <div class="coordinates">
+                            📍 ${daira.lat.toFixed(4)}, ${daira.lng.toFixed(4)}
+                        </div>
+                    </div>
+                    ${municipalitiesHTML}
+                `;
+                
+                container.appendChild(dairaCard);
+            });
+        }
+
+        // Render Investment Opportunities
+        function renderInvestments() {
+            const container = document.getElementById('investments-container');
+            provinceData.investments.forEach(investment => {
+                const card = document.createElement('div');
+                card.className = 'investment-card';
+                
+                const descriptionItems = investment.description.map(desc => `<li>${desc}</li>`).join('');
+                
+                card.innerHTML = `
+                    <div class="investment-icon">
+                        ${icons[investment.icon]}
+                    </div>
+                    <h3>${investment.title}</h3>
+                    <ul>${descriptionItems}</ul>
+                `;
+                
+                container.appendChild(card);
+            });
+        }
+
+        // Calculate Statistics
+        function calculateStatistics() {
+            let totalPopulation = 0;
+            let totalArea = 0;
+            let totalMunicipalities = 0;
+
+            provinceData.dairas.forEach(daira => {
+                daira.municipalities.forEach(municipality => {
+                    totalPopulation += municipality.population;
+                    totalArea += municipality.area;
+                    totalMunicipalities++;
+                });
+            });
+
+            return {
+                totalPopulation,
+                totalArea: totalArea.toFixed(2),
+                totalMunicipalities,
+                totalDairas: provinceData.dairas.length
+            };
+        }
+
+        // Render Statistics
+        function renderStatistics() {
+            const stats = calculateStatistics();
+            const container = document.getElementById('statistics-container');
+            
+            const statsData = [
+                { number: stats.totalPopulation.toLocaleString('ar-DZ'), label: 'إجمالي السكان' },
+                { number: stats.totalArea, label: 'المساحة الإجمالية (كم²)' },
+                { number: stats.totalMunicipalities, label: 'عدد البلديات' },
+                { number: stats.totalDairas, label: 'عدد الدوائر' }
+            ];
+
+            statsData.forEach(stat => {
+                const card = document.createElement('div');
+                card.className = 'stat-card';
+                card.innerHTML = `
+                    <div class="stat-number">${stat.number}</div>
+                    <div class="stat-label">${stat.label}</div>
+                `;
+                container.appendChild(card);
+            });
+        }
+
+        // Initialize Map
+        function initMap() {
+            const map = L.map('map').setView([provinceData.center.lat, provinceData.center.lng], 9);
+
+            L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+                attribution: '&copy; OpenStreetMap contributors'
+            }).addTo(map);
+
+            // Custom icons
+            const dairaIcon = L.divIcon({
+                className: 'custom-div-icon',
+                html: '<div style="background: #D4A373; width: 30px; height: 30px; border-radius: 50%; border: 3px solid white; box-shadow: 0 2px 5px rgba(0,0,0,0.3);"></div>',
+                iconSize: [30, 30],
+                iconAnchor: [15, 15]
+            });
+
+            const municipalityIcon = L.divIcon({
+                className: 'custom-div-icon',
+                html: '<div style="background: #c59363; width: 20px; height: 20px; border-radius: 50%; border: 2px solid white; box-shadow: 0 2px 5px rgba(0,0,0,0.3);"></div>',
+                iconSize: [20, 20],
+                iconAnchor: [10, 10]
+            });
+
+            // Add daira markers
+            provinceData.dairas.forEach(daira => {
+                const marker = L.marker([daira.lat, daira.lng], { icon: dairaIcon }).addTo(map);
+                
+                let municipalitiesList = daira.municipalities.map(m => 
+                    `<li><strong>${m.name}</strong>: ${m.population.toLocaleString('ar-DZ')} نسمة، ${m.area} كم²</li>`
+                ).join('');
+
+                marker.bindPopup(`
+                    <div style="text-align: right; direction: rtl; font-family: Arial, sans-serif;">
+                        <h3 style="color: #D4A373; margin-bottom: 10px;">${daira.name}</h3>
+                        <p><strong>البلديات:</strong></p>
+                        <ul style="padding-right: 20px;">${municipalitiesList}</ul>
+                    </div>
+                `);
+
+                // Add municipality markers
+                daira.municipalities.forEach(municipality => {
+                    const munMarker = L.marker([municipality.lat, municipality.lng], { icon: municipalityIcon }).addTo(map);
+                    munMarker.bindPopup(`
+                        <div style="text-align: right; direction: rtl; font-family: Arial, sans-serif;">
+                            <h4 style="color: #c59363;">${municipality.name}</h4>
+                            <p>👥 السكان: ${municipality.population.toLocaleString('ar-DZ')} نسمة</p>
+                            <p>📍 المساحة: ${municipality.area} كم²</p>
+                        </div>
+                    `);
+                });
+            });
+        }
+
+        // Show Municipality Details Modal
+        function showMunicipalityDetails(name, population, area, lat, lng) {
+            const modal = document.getElementById('municipalityModal');
+            const modalBody = document.getElementById('modal-body');
+            
+            modalBody.innerHTML = `
+                <h2 style="color: #D4A373; margin-bottom: 1.5rem;">${name}</h2>
+                <div style="text-align: right; line-height: 2;">
+                    <p><strong>عدد السكان:</strong> ${population.toLocaleString('ar-DZ')} نسمة</p>
+                    <p><strong>المساحة:</strong> ${area} كم²</p>
+                    <p><strong>الإحداثيات:</strong> ${lat.toFixed(4)}, ${lng.toFixed(4)}</p>
+                    <p><strong>الكثافة السكانية:</strong> ${(population / area).toFixed(2)} نسمة/كم²</p>
+                </div>
+            `;
+            
+            modal.style.display = 'block';
+        }
+
+        // Close Modal
+        document.querySelector('.close').onclick = function() {
+            document.getElementById('municipalityModal').style.display = 'none';
+        };
+
+        window.onclick = function(event) {
+            const modal = document.getElementById('municipalityModal');
+            if (event.target == modal) {
+                modal.style.display = 'none';
+            }
+        };
+
+        // Initialize Everything
+        document.addEventListener('DOMContentLoaded', function() {
+            renderDairas();
+            renderInvestments();
+            renderStatistics();
+            initMap();
+        });
+    </script>
+</body>
+</html>
